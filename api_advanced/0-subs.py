@@ -1,32 +1,17 @@
 #!/usr/bin/python3
-"""Query the Reddit API to get the number of subscribers for a subreddit."""
+"""
+Contains the number_of_subscribers function
+"""
+
 import requests
 
+
 def number_of_subscribers(subreddit):
-    """
-    Return the number of subscribers for the given subreddit.
-
-    Parameters:
-    subreddit (str): The name of the subreddit.
-
-    Returns:
-    int: The number of subscribers if the subreddit is valid, otherwise 0.
-    """
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {'User-Agent': 'My API advanced 1.0'}
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for non-200 status codes
-        data = response.json()
-        if 'data' in data and 'subscribers' in data['data']:
-            return data['data']['subscribers']
-        else:
-            return 0  # Invalid JSON structure
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data: {e}")
-        return 0  # Error during request
-
-# Example usage:
-subreddit = "python"
-print(f"Number of subscribers in r/{subreddit}: {number_of_subscribers(subreddit)}")
-
+    """returns the number of subscribers for a given subreddit"""
+    if subreddit is None or type(subreddit) is not str:
+        return 0
+    r = requests.get('http://www.reddit.com/r/{}/about.json'.format(subreddit),
+                     headers={'User-Agent': '0x16-api_advanced:project:\
+v1.0.0 (by /u/firdaus_cartoon_jr)'}).json()
+    subs = r.get("data", {}).get("subscribers", 0)
+    return subs
